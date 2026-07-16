@@ -1,0 +1,39 @@
+# Ignore bundler config
+/.bundle
+
+# Ignore all logfiles and tempfiles
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore storage (SQLite databases, Active Storage files)
+/storage/*.sqlite3
+/storage/*.sqlite3-journal
+/storage/*.sqlite3-shm
+/storage/*.sqlite3-wal
+
+# Ignore master key and credentials
+/config/master.key
+/config/credentials/*.key
+
+# Ignore node_modules
+/node_modules
+
+# Ignore yarn files
+/yarn-error.log
+.yarn-integrity
+
+# Ignore coverage reports
+/coverage
+
+# Ignore byebug history
+.byebug_history
+
+# Ignore vim swap files
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
