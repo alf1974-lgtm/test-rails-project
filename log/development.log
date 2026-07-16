@@ -1,0 +1,435 @@
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY) /*application='Work'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Work'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'environment' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='Work'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2026-07-16 18:24:44.491288', '2026-07-16 18:24:44.491292') RETURNING "key" /*application='Work'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Work'*/[0m
+Migrating to CreateUsers (20240101000001)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "email" varchar NOT NULL, "role" varchar DEFAULT 'student' NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Work'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email") /*application='Work'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240101000001') RETURNING "version" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+Migrating to CreateDepartments (20240101000002)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE TABLE "departments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Work'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_departments_on_name" ON "departments" ("name") /*application='Work'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240101000002') RETURNING "version" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+Migrating to CreateCourses (20240101000003)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE TABLE "courses" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "code" varchar NOT NULL, "department_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_4e7d7b190d"
+FOREIGN KEY ("department_id")
+  REFERENCES "departments" ("id")
+) /*application='Work'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_courses_on_department_id" ON "courses" ("department_id") /*application='Work'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_courses_on_code" ON "courses" ("code") /*application='Work'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240101000003') RETURNING "version" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+Migrating to CreateSemesters (20240101000004)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE TABLE "semesters" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL, "start_date" date, "end_date" date, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL) /*application='Work'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_semesters_on_name" ON "semesters" ("name") /*application='Work'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240101000004') RETURNING "version" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+Migrating to CreateClassSessions (20240101000005)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE TABLE "class_sessions" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "course_id" integer NOT NULL, "semester_id" integer NOT NULL, "teacher_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_74724573e6"
+FOREIGN KEY ("course_id")
+  REFERENCES "courses" ("id")
+, CONSTRAINT "fk_rails_7aef389ef0"
+FOREIGN KEY ("semester_id")
+  REFERENCES "semesters" ("id")
+, CONSTRAINT "fk_rails_892484d77f"
+FOREIGN KEY ("teacher_id")
+  REFERENCES "users" ("id")
+) /*application='Work'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_class_sessions_on_course_id" ON "class_sessions" ("course_id") /*application='Work'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_class_sessions_on_semester_id" ON "class_sessions" ("semester_id") /*application='Work'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_class_sessions_on_teacher_id" ON "class_sessions" ("teacher_id") /*application='Work'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240101000005') RETURNING "version" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+Migrating to CreateEnrollments (20240101000006)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE TABLE "enrollments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "class_session_id" integer NOT NULL, "student_id" integer NOT NULL, "grade" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_ff2975da8f"
+FOREIGN KEY ("class_session_id")
+  REFERENCES "class_sessions" ("id")
+, CONSTRAINT "fk_rails_f01c555e06"
+FOREIGN KEY ("student_id")
+  REFERENCES "users" ("id")
+) /*application='Work'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_enrollments_on_class_session_id" ON "enrollments" ("class_session_id") /*application='Work'*/[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_enrollments_on_student_id" ON "enrollments" ("student_id") /*application='Work'*/[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_enrollments_on_class_session_id_and_student_id" ON "enrollments" ("class_session_id", "student_id") /*application='Work'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240101000006') RETURNING "version" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Work'*/[0m
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Work'*/[0m
+  [1m[36mEnrollment Delete All (0.1ms)[0m  [1m[31mDELETE FROM "enrollments" /*application='Work'*/[0m
+  [1m[36mClassSession Delete All (0.1ms)[0m  [1m[31mDELETE FROM "class_sessions" /*application='Work'*/[0m
+  [1m[36mSemester Delete All (0.1ms)[0m  [1m[31mDELETE FROM "semesters" /*application='Work'*/[0m
+  [1m[36mCourse Delete All (0.1ms)[0m  [1m[31mDELETE FROM "courses" /*application='Work'*/[0m
+  [1m[36mDepartment Delete All (0.1ms)[0m  [1m[31mDELETE FROM "departments" /*application='Work'*/[0m
+  [1m[36mUser Delete All (0.1ms)[0m  [1m[31mDELETE FROM "users" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mDepartment Exists? (1.8ms)[0m  [1m[34mSELECT 1 AS one FROM "departments" WHERE "departments"."name" = 'English' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mDepartment Create (0.3ms)[0m  [1m[32mINSERT INTO "departments" ("name", "created_at", "updated_at") VALUES ('English', '2026-07-16 18:24:48.018654', '2026-07-16 18:24:48.018654') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (4.4ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mDepartment Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "departments" WHERE "departments"."name" = 'Mathematics' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mDepartment Create (0.3ms)[0m  [1m[32mINSERT INTO "departments" ("name", "created_at", "updated_at") VALUES ('Mathematics', '2026-07-16 18:24:48.030105', '2026-07-16 18:24:48.030105') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mDepartment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "departments" WHERE "departments"."name" = 'Science' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mDepartment Create (0.2ms)[0m  [1m[32mINSERT INTO "departments" ("name", "created_at", "updated_at") VALUES ('Science', '2026-07-16 18:24:48.036636', '2026-07-16 18:24:48.036636') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mDepartment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "departments" WHERE "departments"."name" = 'History' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mDepartment Create (0.2ms)[0m  [1m[32mINSERT INTO "departments" ("name", "created_at", "updated_at") VALUES ('History', '2026-07-16 18:24:48.043042', '2026-07-16 18:24:48.043042') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mDepartment Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "departments" WHERE "departments"."name" = 'Computer Science' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mDepartment Create (0.2ms)[0m  [1m[32mINSERT INTO "departments" ("name", "created_at", "updated_at") VALUES ('Computer Science', '2026-07-16 18:24:48.050322', '2026-07-16 18:24:48.050322') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.8ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'ENG101' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.3ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Introduction to Literature', 'ENG101', 1, '2026-07-16 18:24:48.067250', '2026-07-16 18:24:48.067250') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'ENG201' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Creative Writing', 'ENG201', 1, '2026-07-16 18:24:48.074224', '2026-07-16 18:24:48.074224') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'MAT101' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Calculus I', 'MAT101', 2, '2026-07-16 18:24:48.080726', '2026-07-16 18:24:48.080726') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'MAT201' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Linear Algebra', 'MAT201', 2, '2026-07-16 18:24:48.087025', '2026-07-16 18:24:48.087025') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'SCI101' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Biology 101', 'SCI101', 3, '2026-07-16 18:24:48.093326', '2026-07-16 18:24:48.093326') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'SCI201' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Chemistry Fundamentals', 'SCI201', 3, '2026-07-16 18:24:48.099682', '2026-07-16 18:24:48.099682') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'HIS101' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('World History', 'HIS101', 4, '2026-07-16 18:24:48.106155', '2026-07-16 18:24:48.106155') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'HIS201' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Modern American History', 'HIS201', 4, '2026-07-16 18:24:48.112504', '2026-07-16 18:24:48.112504') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'CS101' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Intro to Programming', 'CS101', 5, '2026-07-16 18:24:48.119159', '2026-07-16 18:24:48.119159') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mCourse Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "courses" WHERE "courses"."code" = 'CS201' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mCourse Create (0.2ms)[0m  [1m[32mINSERT INTO "courses" ("name", "code", "department_id", "created_at", "updated_at") VALUES ('Data Structures & Algorithms', 'CS201', 5, '2026-07-16 18:24:48.125542', '2026-07-16 18:24:48.125542') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mSemester Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "semesters" WHERE "semesters"."name" = 'Fall 2026' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mSemester Create (0.2ms)[0m  [1m[32mINSERT INTO "semesters" ("name", "start_date", "end_date", "created_at", "updated_at") VALUES ('Fall 2026', '2026-09-01', '2026-12-20', '2026-07-16 18:24:48.136089', '2026-07-16 18:24:48.136089') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mSemester Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "semesters" WHERE "semesters"."name" = 'Spring 2027' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mSemester Create (0.3ms)[0m  [1m[32mINSERT INTO "semesters" ("name", "start_date", "end_date", "created_at", "updated_at") VALUES ('Spring 2027', '2027-01-15', '2027-05-10', '2026-07-16 18:24:48.142373', '2026-07-16 18:24:48.142373') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.8ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'alice.monroe@school.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Dr. Alice Monroe', 'alice.monroe@school.edu', 'teacher', '2026-07-16 18:24:48.176737', '2026-07-16 18:24:48.176737') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'bob.nguyen@school.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Prof. Bob Nguyen', 'bob.nguyen@school.edu', 'teacher', '2026-07-16 18:24:48.184967', '2026-07-16 18:24:48.184967') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'carol.patel@school.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Dr. Carol Patel', 'carol.patel@school.edu', 'teacher', '2026-07-16 18:24:48.191059', '2026-07-16 18:24:48.191059') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'david.kim@school.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Prof. David Kim', 'david.kim@school.edu', 'teacher', '2026-07-16 18:24:48.199037', '2026-07-16 18:24:48.199037') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (2.9ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'eva.rosenberg@school.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Dr. Eva Rosenberg', 'eva.rosenberg@school.edu', 'teacher', '2026-07-16 18:24:48.206510', '2026-07-16 18:24:48.206510') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'sam.torres@students.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Sam Torres', 'sam.torres@students.edu', 'student', '2026-07-16 18:24:48.212499', '2026-07-16 18:24:48.212499') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'jamie.lee@students.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Jamie Lee', 'jamie.lee@students.edu', 'student', '2026-07-16 18:24:48.220045', '2026-07-16 18:24:48.220045') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (2.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'morgan.davis@students.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Morgan Davis', 'morgan.davis@students.edu', 'student', '2026-07-16 18:24:48.227176', '2026-07-16 18:24:48.227176') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'riley.chen@students.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Riley Chen', 'riley.chen@students.edu', 'student', '2026-07-16 18:24:48.233199', '2026-07-16 18:24:48.233199') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'jordan.smith@students.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Jordan Smith', 'jordan.smith@students.edu', 'student', '2026-07-16 18:24:48.240580', '2026-07-16 18:24:48.240580') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'casey.brown@students.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Casey Brown', 'casey.brown@students.edu', 'student', '2026-07-16 18:24:48.247872', '2026-07-16 18:24:48.247872') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'taylor.wilson@students.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Taylor Wilson', 'taylor.wilson@students.edu', 'student', '2026-07-16 18:24:48.253997', '2026-07-16 18:24:48.253997') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mUser Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = 'alex.johnson@students.edu' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mUser Create (0.3ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "role", "created_at", "updated_at") VALUES ('Alex Johnson', 'alex.johnson@students.edu', 'student', '2026-07-16 18:24:48.261682', '2026-07-16 18:24:48.261682') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.7ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (1, 1, 1, '2026-07-16 18:24:48.271560', '2026-07-16 18:24:48.271560') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.5ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (3, 1, 2, '2026-07-16 18:24:48.276584', '2026-07-16 18:24:48.276584') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.5ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (5, 1, 3, '2026-07-16 18:24:48.281015', '2026-07-16 18:24:48.281015') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.5ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (7, 1, 4, '2026-07-16 18:24:48.285639', '2026-07-16 18:24:48.285639') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.5ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (9, 1, 5, '2026-07-16 18:24:48.290031', '2026-07-16 18:24:48.290031') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.5ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (2, 2, 1, '2026-07-16 18:24:48.294470', '2026-07-16 18:24:48.294470') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.5ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (4, 2, 2, '2026-07-16 18:24:48.298867', '2026-07-16 18:24:48.298867') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.5ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (6, 2, 3, '2026-07-16 18:24:48.303270', '2026-07-16 18:24:48.303270') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.5ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (8, 2, 4, '2026-07-16 18:24:48.307834', '2026-07-16 18:24:48.307834') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mClassSession Create (1.6ms)[0m  [1m[32mINSERT INTO "class_sessions" ("course_id", "semester_id", "teacher_id", "created_at", "updated_at") VALUES (10, 2, 5, '2026-07-16 18:24:48.312201', '2026-07-16 18:24:48.312201') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (21.4ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 6 AND "enrollments"."class_session_id" = 1 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.3ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (1, 6, 'B', '2026-07-16 18:24:48.344995', '2026-07-16 18:24:48.344995') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 7 AND "enrollments"."class_session_id" = 1 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.3ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (1, 7, 'C+', '2026-07-16 18:24:48.352827', '2026-07-16 18:24:48.352827') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 8 AND "enrollments"."class_session_id" = 1 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (1, 8, 'C', '2026-07-16 18:24:48.361234', '2026-07-16 18:24:48.361234') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 9 AND "enrollments"."class_session_id" = 1 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (1, 9, 'A-', '2026-07-16 18:24:48.369133', '2026-07-16 18:24:48.369133') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 10 AND "enrollments"."class_session_id" = 1 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (1, 10, 'C', '2026-07-16 18:24:48.375403', '2026-07-16 18:24:48.375403') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 6 AND "enrollments"."class_session_id" = 2 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.3ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (2, 6, 'B+', '2026-07-16 18:24:48.382661', '2026-07-16 18:24:48.382661') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (2.4ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 9 AND "enrollments"."class_session_id" = 2 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.3ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (2, 9, 'C+', '2026-07-16 18:24:48.389757', '2026-07-16 18:24:48.389757') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 11 AND "enrollments"."class_session_id" = 2 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (2, 11, 'C', '2026-07-16 18:24:48.395970', '2026-07-16 18:24:48.395970') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 12 AND "enrollments"."class_session_id" = 2 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (2, 12, 'B+', '2026-07-16 18:24:48.403004', '2026-07-16 18:24:48.403004') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 13 AND "enrollments"."class_session_id" = 2 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.3ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (2, 13, 'B+', '2026-07-16 18:24:48.410333', '2026-07-16 18:24:48.410333') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 7 AND "enrollments"."class_session_id" = 3 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (3, 7, 'C', '2026-07-16 18:24:48.416651', '2026-07-16 18:24:48.416651') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 8 AND "enrollments"."class_session_id" = 3 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (3, 8, 'C+', '2026-07-16 18:24:48.423697', '2026-07-16 18:24:48.423697') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 10 AND "enrollments"."class_session_id" = 3 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (3, 10, 'B', '2026-07-16 18:24:48.431089', '2026-07-16 18:24:48.431089') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 11 AND "enrollments"."class_session_id" = 3 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (3, 11, 'A-', '2026-07-16 18:24:48.437260', '2026-07-16 18:24:48.437260') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 13 AND "enrollments"."class_session_id" = 3 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.3ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (3, 13, 'B', '2026-07-16 18:24:48.444570', '2026-07-16 18:24:48.444570') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 6 AND "enrollments"."class_session_id" = 4 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (4, 6, 'C+', '2026-07-16 18:24:48.450985', '2026-07-16 18:24:48.450985') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 7 AND "enrollments"."class_session_id" = 4 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (4, 7, 'A-', '2026-07-16 18:24:48.457354', '2026-07-16 18:24:48.457354') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 12 AND "enrollments"."class_session_id" = 4 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (4, 12, 'A', '2026-07-16 18:24:48.463799', '2026-07-16 18:24:48.463799') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 13 AND "enrollments"."class_session_id" = 4 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (4, 13, 'A-', '2026-07-16 18:24:48.470147', '2026-07-16 18:24:48.470147') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 9 AND "enrollments"."class_session_id" = 4 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (4, 9, 'A', '2026-07-16 18:24:48.476418', '2026-07-16 18:24:48.476418') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 8 AND "enrollments"."class_session_id" = 5 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.4ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (5, 8, 'B+', '2026-07-16 18:24:48.482689', '2026-07-16 18:24:48.482689') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 9 AND "enrollments"."class_session_id" = 5 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (5, 9, 'B-', '2026-07-16 18:24:48.489263', '2026-07-16 18:24:48.489263') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 10 AND "enrollments"."class_session_id" = 5 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (5, 10, 'A-', '2026-07-16 18:24:48.495736', '2026-07-16 18:24:48.495736') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 11 AND "enrollments"."class_session_id" = 5 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (5, 11, 'C+', '2026-07-16 18:24:48.502324', '2026-07-16 18:24:48.502324') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 12 AND "enrollments"."class_session_id" = 5 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (5, 12, 'B', '2026-07-16 18:24:48.508845', '2026-07-16 18:24:48.508845') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 6 AND "enrollments"."class_session_id" = 6 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (6, 6, NULL, '2026-07-16 18:24:48.515526', '2026-07-16 18:24:48.515526') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 7 AND "enrollments"."class_session_id" = 6 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (6, 7, NULL, '2026-07-16 18:24:48.522050', '2026-07-16 18:24:48.522050') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 8 AND "enrollments"."class_session_id" = 6 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (6, 8, NULL, '2026-07-16 18:24:48.528520', '2026-07-16 18:24:48.528520') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 9 AND "enrollments"."class_session_id" = 7 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.3ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (7, 9, NULL, '2026-07-16 18:24:48.535059', '2026-07-16 18:24:48.535059') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 11 AND "enrollments"."class_session_id" = 7 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (7, 11, NULL, '2026-07-16 18:24:48.541499', '2026-07-16 18:24:48.541499') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 12 AND "enrollments"."class_session_id" = 7 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (7, 12, NULL, '2026-07-16 18:24:48.548311', '2026-07-16 18:24:48.548311') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 10 AND "enrollments"."class_session_id" = 8 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (8, 10, NULL, '2026-07-16 18:24:48.554801', '2026-07-16 18:24:48.554801') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 13 AND "enrollments"."class_session_id" = 8 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (8, 13, NULL, '2026-07-16 18:24:48.561204', '2026-07-16 18:24:48.561204') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 6 AND "enrollments"."class_session_id" = 8 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (8, 6, NULL, '2026-07-16 18:24:48.567678', '2026-07-16 18:24:48.567678') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 7 AND "enrollments"."class_session_id" = 9 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (9, 7, NULL, '2026-07-16 18:24:48.573959', '2026-07-16 18:24:48.573959') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 8 AND "enrollments"."class_session_id" = 9 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (9, 8, NULL, '2026-07-16 18:24:48.580212', '2026-07-16 18:24:48.580212') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.5ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 9 AND "enrollments"."class_session_id" = 9 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (9, 9, NULL, '2026-07-16 18:24:48.586632', '2026-07-16 18:24:48.586632') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 11 AND "enrollments"."class_session_id" = 10 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (10, 11, NULL, '2026-07-16 18:24:48.592947', '2026-07-16 18:24:48.592947') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.6ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 12 AND "enrollments"."class_session_id" = 10 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (10, 12, NULL, '2026-07-16 18:24:48.599423', '2026-07-16 18:24:48.599423') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='Work'*/[0m
+  [1m[36mEnrollment Exists? (1.7ms)[0m  [1m[34mSELECT 1 AS one FROM "enrollments" WHERE "enrollments"."student_id" = 13 AND "enrollments"."class_session_id" = 10 LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Create (0.2ms)[0m  [1m[32mINSERT INTO "enrollments" ("class_session_id", "student_id", "grade", "created_at", "updated_at") VALUES (10, 13, NULL, '2026-07-16 18:24:48.606021', '2026-07-16 18:24:48.606021') RETURNING "id" /*application='Work'*/[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='Work'*/[0m
+  [1m[36mDepartment Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "departments" /*application='Work'*/[0m
+  [1m[36mCourse Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "courses" /*application='Work'*/[0m
+  [1m[36mSemester Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "semesters" /*application='Work'*/[0m
+  [1m[36mUser Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" WHERE "users"."role" = 'teacher' /*application='Work'*/[0m
+  [1m[36mUser Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" WHERE "users"."role" = 'student' /*application='Work'*/[0m
+  [1m[36mClassSession Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "class_sessions" /*application='Work'*/[0m
+  [1m[36mEnrollment Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "enrollments" /*application='Work'*/[0m
+  [1m[36mUser Pluck (0.1ms)[0m  [1m[34mSELECT "users"."id", "users"."name" FROM "users" WHERE "users"."role" = 'student' /*application='Work'*/[0m
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."role" = 'student' LIMIT 1 /*application='Work'*/[0m
+  [1m[36mEnrollment Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "enrollments" WHERE "enrollments"."student_id" = 6 /*application='Work'*/[0m
+  [1m[36mClassSession Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "class_sessions" INNER JOIN "enrollments" ON "class_sessions"."id" = "enrollments"."class_session_id" WHERE "enrollments"."student_id" = 6 /*application='Work'*/[0m
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Generating image variants require the image_processing gem. Please add `gem "image_processing", "~> 1.2"` to your Gemfile or set `config.active_storage.variant_processor = :disabled`.
+Started GET "/students/6" for 127.0.0.1 at 2026-07-16 18:25:13 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='Work'*/[0m
+Processing by StudentsController#show as */*
+  Parameters: {"id" => "6"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 6 AND "users"."role" = 'student' LIMIT 1 /*action='show',application='Work',controller='students'*/[0m
+  ↳ app/controllers/students_controller.rb:21:in 'StudentsController#set_student'
+Completed 200 OK in 54ms (Views: 0.4ms | ActiveRecord: 3.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/students/6/courses" for 127.0.0.1 at 2026-07-16 18:25:15 +0000
+Processing by StudentsController#courses as */*
+  Parameters: {"id" => "6"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 6 AND "users"."role" = 'student' LIMIT 1 /*action='courses',application='Work',controller='students'*/[0m
+  ↳ app/controllers/students_controller.rb:21:in 'StudentsController#set_student'
+  [1m[36mClassSession Eager Load (0.8ms)[0m  [1m[34mSELECT "class_sessions"."id" AS t0_r0, "class_sessions"."course_id" AS t0_r1, "class_sessions"."semester_id" AS t0_r2, "class_sessions"."teacher_id" AS t0_r3, "class_sessions"."created_at" AS t0_r4, "class_sessions"."updated_at" AS t0_r5, "courses"."id" AS t1_r0, "courses"."name" AS t1_r1, "courses"."code" AS t1_r2, "courses"."department_id" AS t1_r3, "courses"."created_at" AS t1_r4, "courses"."updated_at" AS t1_r5, "semesters"."id" AS t2_r0, "semesters"."name" AS t2_r1, "semesters"."start_date" AS t2_r2, "semesters"."end_date" AS t2_r3, "semesters"."created_at" AS t2_r4, "semesters"."updated_at" AS t2_r5, "users"."id" AS t3_r0, "users"."name" AS t3_r1, "users"."email" AS t3_r2, "users"."role" AS t3_r3, "users"."created_at" AS t3_r4, "users"."updated_at" AS t3_r5, "enrollments_class_sessions"."id" AS t4_r0, "enrollments_class_sessions"."class_session_id" AS t4_r1, "enrollments_class_sessions"."student_id" AS t4_r2, "enrollments_class_sessions"."grade" AS t4_r3, "enrollments_class_sessions"."created_at" AS t4_r4, "enrollments_class_sessions"."updated_at" AS t4_r5 FROM "class_sessions" INNER JOIN "enrollments" ON "class_sessions"."id" = "enrollments"."class_session_id" LEFT OUTER JOIN "courses" ON "courses"."id" = "class_sessions"."course_id" LEFT OUTER JOIN "semesters" ON "semesters"."id" = "class_sessions"."semester_id" LEFT OUTER JOIN "users" ON "users"."id" = "class_sessions"."teacher_id" LEFT OUTER JOIN "enrollments" AS "enrollments_class_sessions" ON "enrollments_class_sessions"."class_session_id" = "class_sessions"."id" WHERE "enrollments"."student_id" = 6 ORDER BY semesters.name, courses.name /*action='courses',application='Work',controller='students'*/[0m
+  ↳ app/controllers/students_controller.rb:15:in 'Enumerable#map'
+Completed 200 OK in 146ms (Views: 0.3ms | ActiveRecord: 3.2ms (2 queries, 0 cached) | GC: 36.0ms)
+
+
+Started GET "/students/999" for 127.0.0.1 at 2026-07-16 18:25:18 +0000
+Processing by StudentsController#show as */*
+  Parameters: {"id" => "999"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 999 AND "users"."role" = 'student' LIMIT 1 /*action='show',application='Work',controller='students'*/[0m
+  ↳ app/controllers/students_controller.rb:21:in 'StudentsController#set_student'
+Filter chain halted as :set_student rendered or redirected
+Completed 404 Not Found in 1ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/students/1" for 127.0.0.1 at 2026-07-16 18:25:18 +0000
+Processing by StudentsController#show as */*
+  Parameters: {"id" => "1"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = 1 AND "users"."role" = 'student' LIMIT 1 /*action='show',application='Work',controller='students'*/[0m
+  ↳ app/controllers/students_controller.rb:21:in 'StudentsController#set_student'
+Filter chain halted as :set_student rendered or redirected
+Completed 404 Not Found in 1ms (Views: 0.1ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
